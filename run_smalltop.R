@@ -1,0 +1,14 @@
+
+prevmodel=""
+model="smalltop"
+
+N.mcmc=1000
+run.nr=1
+thin=10
+cpus=1
+
+source("3stage_cpu.R")
+
+
+
+
