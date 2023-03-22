@@ -1,0 +1,89 @@
+
+This folder contains the necessary scripts to run
+simulation 1 in our study, which is concerned with estimation
+when individual count data has unidentified individuals, regional
+occupancy and additional information concerning regional occupancy.
+The summary scripts compares RMSEs for model and raw (ratio)
+estimates, corrected and uncorrected for unidentified individuals.
+Note that some files are label 'colony' as that is the term for
+the individuals in our empirical dataset. Most of the scripts will be
+similar to that of the empirical analysis, so those are shown at the end
+
+In a subfolder, we will put the simulation files we used.
+
+R Scripts:
+
+    Scripts for making the simulations:
+
+    make_sims.R - A script that makes 100 simulations using the
+    'simoccu_save.R" script.
+    
+    simoccu_save.R - Reads simulations ettings from the script
+    "simoccu_settings.R". Then defines the variation components,
+    calculates the matrix of site-occupancy, abundance given
+    occupancy, regional occupancy, additional information, and
+    identifiability probabilities, before sampling the
+    number of individuals on the subsample level for each species
+    (using "rpois"). Then aggregates the data site-level,
+    creates the output structure, samples wich individuals that
+    will and will not be identified to the species-level and
+    saves this on a file that can be used as an input file
+    for the analysis scripts. Lastly, also makes a file for
+    additional information concerning regional occupancy.
+
+    simoccu_settings.R - Defines the site-occupancy probabilities
+    and abundance given occupancy for each species+formation
+    combination. Also defines regional presence/absence, additional
+    information for regional occupancy, which genera that should
+    contain unidentified individuals and identification probabilities.
+    This is used in the simulations, but also to check estimates
+    versus reality after the analyses have been performed.
+
+
+    Post-analyses scripts:
+    
+    rel_abundance_smalltop.R - Reads and collates analyses results
+    using the script rel_abundance_smalltop_read_data.R. Calculates
+    RMSEs for model and raw (ratio) estimates, bothwhen correcting
+    for and when not correcting for unidentified individuals. Also
+    contains some plotting code.
+
+    rel_abundance_smalltop_read_data.R - Reads and collates analyses
+    results. Does this for relative abundance, site-occupancy
+    probabilities, abundance given occupancy, regional occupancy
+    and identification probabilities.
+
+
+    Files necessary for performing MCMC analyses:
+
+    run_smalltop.R - An example file for how the analysis can be
+    run. Basically only defines the model ("smalltop"), the simulation
+    number, a run identifiactor and some MCMC run variables. (Number of MCMC samples, thinning and number of CPUs used. Note that the LaplacesDemon used for MCMC sampling creates huge temporary files if number of CPUs is bigger than 1. I prefer just starting many processes with the use of one CPU per process, now). it then call the routine "3stage_cpu.R", which performs the MCMC sampling. with help from some other sub-scripts. The model is called "smalltop" since the last change to out model was to introduce species random effects and so reduce the number of top parameters.
+
+    3stage_cpu.R - Uses the LaplacesDemon package (https://github.com/LaplacesDemonR/LaplacesDemon) to perform MCMC sampling with the help of some sub-scripts. Does this in 3 stages and allows for running on multiple CPUs at a time (hence the name). TTwo of these stages are burn-in sampling using two different MCMC methods, before the real sampling starts using a third method. These different methods were used in order to manually optimize the chance of getting convergence in the MCMC samples. This script uses the "read_data.R" script to read the dataset, the "model_smalltop.R" script to get the definition of the hyperparameters, the prior distribution and the likelihood, the "init_reruns.R" script in order to have routines for trying to find the best starting parameters, the "make_laplace_wrapper.R" script for creating and interface between the prior and likelihood functions and the LaplacesDemon package and the "find_best_par.R" script for finding and returning the parameter set with the highest prior*likelihood from an MCMC sample from the burn-in phases. The best parameters from "init_reruns.R" is used in as the initial parameter set in the first phase, the best parameer set from the first phase is used as the initial parameer set in the second phase, and the best parameters from the second phase is used as the intial parameter set in the third stage.
+
+    model_smalltop.R - This script defines the model. (There are many scripts called "model_.R" in our working directory, representing different stages in our development of the model we ended up with. One can copy and modify this script and call it something starting with "model_<...>" where "<...> stands for the new model name. and the other scripts can then call that model instead of the one given here. This setup made for rapid testing and running of new models, while still keeping the old ones. The model we ended up with is called "smalltop", since the last thing we did was to make species constants into species random effects and thus create a small set of top parameters. The script contains 4 features:
+        The definition of the hyperparameters (i.e. the variables that define the prior distribution of the top parameters). This is a list called "hyper" that contains the hyperparameters, but also some additional information that is sent to the prior and the likelihood (such as the number of species, number of genera, number of genera with unidentified individuals, number of formations, a set of indicators of whether a species has no detected presence in each formation ("no.presence") and another set of indicators for each species of whether there is additional information suggesting regional presence or not for each formation ("inter").
+        A set of initial value functions called "init.params.flat" and "init.params.flat.previousmodel". "init.params.flat" is called in the "init_reruns.R" script if no previous model is specified, while "init.params.flat.previousmodel" is called if a previous model is specified. The object of these two functions are to sample an intitial value for the parameter set. "init.params.flat" does this completely at random (within the bounds of hyperparameters. "init.params.flat.previousmodel" sets the parameters/random factors that the model has in common with the previous model from the mean and standard deviation of MCMC runs for the previous model. The parameters that are not common are set at random. For our current run, we did not use parameter samples from the previous model, as the model seemed to converge anyhow. However, in the past we have found the use of previous (simpler) models useful.
+        The prior distribution function, called "logprior.flat". reads a parameter vector and the hyperparameter list and assigns the different values to different top parameters. Then calculates the logarithmic of the probability density of the prior distribution for the specified values of the top parameter.
+        The likelihood function, called "loglik.flat", reads a parameter vector, a data file and a set of additional information (from the "hyper" list) and outputs the logartihmic likelihood value. It first reads the parameter and random effect values from the parameter vector, then calculates the likelihood contribution from the random effect values (this could instead be in the prior distribution function, but we opted for putting it here). It then derives from the random effect values the occupancy and abundance given occupancy matrices (size: number of sites x number of species). It then derives the regional occupancy state from the regional occupancy random effects plus the additional data indicating regional presence and modifies the occupancy matrix accordingly. It also creates a modified abundance given occupancy matrix which takes into account identification probabilities of genera with unidentified individuals. It then calculates the log-likelihood value for the individual species counts based on teh occupancy and modified abundance given occupancy matrices. Lastly, if there are genera with unidentified individuals, it calculates the likelihood contribution for the unidentified individuals given the identified ones.
+
+    init_rerun.R - Called by "stage_cpu.R" to sample initial parameters many times, and return the "best one" in terms of highest prior*likelihood. Contains two functions. "init.params.flat2" uses the "init.params.flat" function defined in "model_smalltop.R" to sample without any previously defined model. "init.params.flat2.prevmodel" instead uses "init.params.flat.prevmodel" (also defined in "model_smalltop.R") instead for sampling from a previous run.
+
+negbinom.R - Called by "model_smalltop.R". Contains functions defining the negative binomial distribution for the original parametrization and our parametrization ("dnegbinom1 and "dnegbinom2" respectively) and also the zero-inflated negative binomial distribution with our parametrization, on the original scale ("dnegbinom.zero") and the log-scale ("dlnegbinom.zero").
+
+read_data.R - Reads the individual count data from the file "expanded_infile.R". Then standardizes the subsample weights and areas (if applicable) and sets variables representing the number of species, genera, genera with unidentified individuals, formations and sites. Also defines the logit and inverse logit funciton ("logit" and "ilgoit" respectively). Calculates the midpoint of each formation age. Creates a species name vector ("sp") from the columns in the data file, and similarly with the genus names ("genusnames"). Creates a lookup table for the genus numbers of genera with unidentified individuals ("unid.genus.nr"). Then reads a file called "interaction_indicators.csv" with indicator values for whether additional information suggest regional occupancy for eahc species or not. Fills in with zeros the species that appear in the individual count data but not in the additional information file. Lastly, it creates a number of formation x number of species matrix called "no.presence" which indicates whether no regional presence was found in the individual count data for each formation+species combination. "1" means no presence was found, while "0" means presence was found. The variable "n.no.presence" is the seet to the sum of this matrix, so represents the number of species+formation combinations with no deteciton in the individual count data.
+
+find_best_par.R - Contains code for running through MCMC samples returned from the LaplacesDemon package and find the sampled parameter set with the highest prior*likelihood. This function comes in two versions, "find.best.par.hpc" for LaplacesDemon runs with multiple cpus (really jsut cores) run in parallel, and "find.best.par", which does the same for single CPU LaplacesDemon runs.
+
+make_laplace_wrapper.R - Contains method that presents the data from
+"read_data.R" and the prior/likelihood functions defined in
+"model_smalltop.R" in a format that the LaplacesDemon package
+understands.
+
+
+shell scripts:
+make_runs - A shell script that starts analyses on all the simulated
+files for a machine running the SLURM system.
+
+
