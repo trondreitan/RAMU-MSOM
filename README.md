@@ -1,4 +1,4 @@
-# RAMU-MSOM - simulation 2 files
+# RAMU-MSOM - simulation 2 scripts
 Relative Abundance estimation with Unidentified individuals using Multi-Species Occupancy Modelling
 
 This folder contains the necessary scripts and data files to
