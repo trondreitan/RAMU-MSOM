@@ -188,7 +188,7 @@ R Scripts:
     "init.params.flat.prevmodel" (also defined in "model_smalltop.R")
     instead for sampling from a previous run. 
 
-negbinom.R - Called by "model_smalltop.R". Contains functions
+* negbinom.R - Called by "model_smalltop.R". Contains functions
     defining the negative binomial distribution for the original 
     parametrization and our parametrization ("dnegbinom1 and
     "dnegbinom2" respectively) and also the zero-inflated 
@@ -196,7 +196,7 @@ negbinom.R - Called by "model_smalltop.R". Contains functions
     the original scale ("dnegbinom.zero") and the log-scale
     ("dlnegbinom.zero").
 
-read_data.R - Reads the individual count data from the file 
+* read_data.R - Reads the individual count data from the file 
     "expanded_infile.R". Then standardizes the subsample weights
     and areas (if applicable) and sets variables representing
     the number of species, genera, genera with unidentified 
@@ -221,7 +221,7 @@ read_data.R - Reads the individual count data from the file
     species+formation combinations with no deteciton in the 
     individual count data.
 
-find_best_par.R - Contains code for running through MCMC samples
+* find_best_par.R - Contains code for running through MCMC samples
     returned from the LaplacesDemon package and find the
     sampled parameter set with the highest prior*likelihood.
     This function comes in two versions, "find.best.par.hpc"
@@ -229,7 +229,39 @@ find_best_par.R - Contains code for running through MCMC samples
     run in parallel, and "find.best.par", which does the same
     for single CPU LaplacesDemon runs. 
 
-make_laplace_wrapper.R - Contains method that presents the data 
+* make_laplace_wrapper.R - Contains method that presents the data 
     from "read_data.R" and the prior/likelihood functions defined 
     in "model_smalltop.R" in a format that the LaplacesDemon 
     package understands.
+    
+Scripts that collates the output from the MCMC sampling:
+    
+* lookat.R - Reads in the MCMC samples from multiple runs. The output
+    from 3stage_cpu.R are store on files called <model>_<run-number>.Rdata, 
+    so for instance the first output file from the "smalltop" model (the 
+    model presented in our study) is called "smalltop_01.Rdata". In the
+    current script, 100 MCMC chains are fetched, though it is easy enough 
+    to change that, just set the "N.runs" variable to the number of output 
+    files you have. The script looks at the Gelman index, and plots the
+    4 "worst" parameters according to that index and calculates the 
+    autocorrelation length of those. Store parameter means and 95% credibility 
+    intervals, in case of later use in other scripts. Plots MCMC samples
+    with prior and also compares those analytically for all top parameters.
+    Outputs some statistics about regional occupancy estimates.
+
+* rel_abundance_smalltop.R - Reads in the MCMC samples from multiple runs.
+    (See "lookat.R" for how this is done). Then collates all the MCMC chains
+    into one, and fetches random variable values in order to piece together
+    posterior samples of site-occupancy, identification and regional occupancy 
+    probabilities as well as abundance given occupancy for each species+formation
+    combinations. This again is used for getting the posterior (MCMC) samples of 
+    relative abundance for each species+formation. These samples are then further 
+    collated by finding the mean (estimates) and 2.5% and 97.5 quantiles (limits
+    of the 95% credibility bands) for each of these quantities for each 
+    species+formation combination. These are then saved on files, for later 
+    plotting or analyses. A preliminary plot of relative abundance (one plot for
+    each species) is done at the end of the script, to show how these things can
+    be plotted.
+    
+    
+    
