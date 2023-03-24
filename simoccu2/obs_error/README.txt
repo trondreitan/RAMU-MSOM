@@ -24,6 +24,7 @@ Post-analyses scripts:
 
 * rel_abundance_shell.R - Reads and collates analyses results for the subsample count data and calculates RMSEs for model and raw (ratio) estimates.
 
+* compare_rmses.R - Reads the RMSE scores computed in "rel_abundance_smalltop.R" and "rel_abundance_shell.R" and plots that data against observational error probability.
 
 Files necessary for performing MCMC analyses:
 
