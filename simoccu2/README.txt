@@ -6,7 +6,7 @@ for both subsample count and individual count data. Note that the model for indi
 individual counts themselves are lebeled "colony" as those are the individuals in our case. Scripts concerned with subsample counts are labeled
 with "shell", since those are our subsamples.
 
-In a subfolder, we will put the simulation files we used. In another, we will put the sub-study concerning observational errors.
+In a subfolder, "simdata", we have put the simulation files we used. In another, we will put the sub-study concerning observational errors. In another called "obs_error", we put the substudy concerning observational errors.
 
 R Scripts:
 
