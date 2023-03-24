@@ -8,6 +8,9 @@ with "shell", since those are our subsamples.
 
 In a subfolder, "simdata", we have put the simulation files we used. In another, we will put the sub-study concerning observational errors. In another called "obs_error", we put the substudy concerning observational errors.
 
+Most of the structure and scripts here are the same as for the empirical study, but we give complete files so that the scripts are 
+self-contained in this folder.
+
 R Scripts:
 
 Script for making the simulations:
