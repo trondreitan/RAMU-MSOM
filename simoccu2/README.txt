@@ -1,8 +1,8 @@
 This folder contains the necessary scripts to run simulation 2 in our study, which is concerned with estimating relatve abundance using
 both individual count and subsample count data, as well as raw and model estimates. The complications of unidentified individuals and
-the possibility of regional absence has been remove, in order to make the comparison between individual counts and subsample counts fair
+the possibility of regional absence has been removed, in order to make the comparison between individual counts and subsample counts fair
 (as the subsample count model does not allow for these things). The summary scripts compares RMSEs for model and raw (ratio) estimates
-for both subsample count and individual count data. Note that the model for individual counts is called "msalltop" while files concerned with
+for both subsample count and individual count data. Note that the model for individual counts is called "smalltop" while files concerned with
 individual counts themselves are lebeled "colony" as those are the individuals in our case. Scripts concerned with subsample counts are labeled
 with "shell", since those are our subsamples.
 
