@@ -1,0 +1,209 @@
+#!/usr/bin/perl
+
+if($#ARGV!=5 && $#ARGV!=4)
+{
+    print "Usage: make_runs <number of simulations> <number of error models> <number of runs per simulation> <run start nr> <numiter> [<thin>]\n";
+    exit(0);
+}
+
+$numsim=int($ARGV[0]);
+$numerr=int($ARGV[1]);
+$numrun=int($ARGV[2]);
+$startrun=int($ARGV[3]);
+$numiter=int($ARGV[4]);
+$thin=50;
+if($#ARGV==5)
+{
+    $thin=int($ARGV[5]);
+}
+
+$numcpus=1;
+    
+open(out2, ">sbatch_batch");
+print out2 "#!/usr/bin/sh\n\n";
+
+for($sim=1;$sim<=$numsim;$sim++)
+{
+    for($err=1;$err<=$numerr;$err++)
+    {
+	for($run=$startrun;$run<=$numrun+$startrun-1;$run++)
+	{
+	    open(in, "<run_shell.R");
+	    $outfile=sprintf("run_shell_s%03d_e%02d_r%03d.R",$sim,$err,$run);
+	    $jobname=sprintf("ss%03de%02dr%03d.R",$sim,$err,$run);
+	    open(out, ">$outfile");
+	    if(!in)
+	    {
+		print "Error opening file run_shell.R!\n";
+		exit(0);
+	    }
+	    
+	    while(<in>)
+	    {
+		if(/sim\.nr/)
+		{
+		    print out sprintf("sim.nr=%d\n",$sim);
+		}
+		elsif(/err\.nr/)
+		{
+		    print out sprintf("err.nr=%d\n",$err);
+		}
+		elsif(/run\.nr/)
+		{
+		    print out sprintf("run.nr=%d\n",$run);
+		}
+		elsif(/cpus/)
+		{
+		    print out sprintf("cpus=%d\n",$numcpus);
+		}
+		elsif(/thin/)
+		{
+		    print out sprintf("thin=%d\n",$thin);
+		}
+		elsif(/N.mcmc/)
+		{
+		    print out sprintf("N.mcmc=%d\n",$numiter);
+		}
+		else
+		{
+		    print out $_;
+		}
+	    }
+	    close(in);
+	    close(out);
+	    
+	    # Make job file:
+	    $jobfile=sprintf("job_shell_s%03d_e%02d_r%03d", $sim,$err,$run);
+	    open(job,">$jobfile");
+	    print job "#!/bin/bash\n";
+	    print job "\n";
+	    print job "# Job name:\n";
+	    print job "#SBATCH --job-name=$jobname\n";
+	    print job "#\n";
+	    print job "# Project:\n";
+	    print job "#SBATCH --account=nn9244k\n";
+	    print job "#\n";
+	    print job "# Wall clock limit:\n";
+	    print job "#SBATCH --time=167:00:00\n";
+	    print job "#\n";
+	    #print job "# Partition:\n";
+	    #print job "#SBATCH --partition=bigmem\n";
+	    #print job "#\n";
+	    print job "# Max memory usage:\n";
+	    print job "#SBATCH --mem-per-cpu=4000M\n";
+	    print job "#\n";
+	    if($numcpus>1)
+	    {
+		print job "# Number of tasks (cores)\n";
+		print job sprintf("#SBATCH --nodes=1 --ntasks-per-node=%d\n",$numcpus+1);
+		print job "#\n";
+	    }
+	    print job "## Set up job environment\n";
+	    print job "#source /cluster/bin/jobsetup\n";
+	    print job "#\n";
+	    print job "\n";
+	    print job "## Do some work:\n";
+	    print job "module load  R/3.6.2-foss-2019b\n";
+	    $rdump=sprintf("rdump_shell_s%03d_e%02d_r%03d.txt",$sim,$err,$run);
+	    print job "R --no-save < $outfile > /dev/null\n";
+	    
+	    close(job);
+	    
+	    print out2 "sbatch $jobfile\n";
+	    
+	    
+	    open(in, "<run_smalltop.R");
+	    
+	    $outfile=sprintf("run_smalltop_s%03d_e%02d_r%03d.R",$sim,$err,$run);
+	    $jobname=sprintf("cs%03de%02dr%03d.R",$sim,$err,$run);
+	    open(out, ">$outfile");
+	    if(!in)
+	    {
+		print "Error opening file run_smalltop.R!\n";
+		exit(0);
+	    }
+	    
+	    while(<in>)
+	    {
+		if(/sim\.nr/)
+		{
+		    print out sprintf("sim.nr=%d\n",$sim);
+		}
+		elsif(/err\.nr/)
+		{
+		    print out sprintf("err.nr=%d\n",$err);
+		}
+		elsif(/run\.nr/)
+		{
+		    print out sprintf("run.nr=%d\n",$run);
+		}
+		elsif(/cpus/)
+		{
+		    print out sprintf("cpus=%d\n",$numcpus);
+		}
+		elsif(/thin/)
+		{
+		    print out sprintf("thin=%d\n",$thin);
+		}
+		elsif(/N.mcmc/)
+		{
+		    print out sprintf("N.mcmc=%d\n",$numiter);
+		}
+		else
+		{
+		    print out $_;
+		}
+	    }
+	    close(in);
+	    close(out);
+	    
+	    # Make job file:
+	    $jobfile=sprintf("job_smalltop_s%03d_e%02d_r%03d", $sim,$err,$run);
+	    open(job,">$jobfile");
+	    print job "#!/bin/bash\n";
+	    print job "\n";
+	    print job "# Job name:\n";
+	    print job "#SBATCH --job-name=$jobname\n";
+	    print job "#\n";
+	    print job "# Project:\n";
+	    print job "#SBATCH --account=nn9244k\n";
+	    print job "#\n";
+	    print job "# Wall clock limit:\n";
+	    print job "#SBATCH --time=167:00:00\n";
+	    print job "#\n";
+	    #print job "# Partition:\n";
+	    #print job "#SBATCH --partition=bigmem\n";
+	    #print job "#\n";
+	    print job "# Max memory usage:\n";
+	    print job "#SBATCH --mem-per-cpu=4000M\n";
+	    print job "#\n";
+	    if($numcpus>1)
+	    {
+		print job "# Number of tasks (cores)\n";
+		print job sprintf("#SBATCH --nodes=1 --ntasks-per-node=%d\n",$numcpus+1);
+		print job "#\n";
+	    }
+	    print job "## Set up job environment\n";
+	    print job "#source /cluster/bin/jobsetup\n";
+	    print job "#\n";
+	    print job "\n";
+	    print job "## Do some work:\n";
+	    print job "module load  R/3.6.2-foss-2019b\n";
+	    $rdump=sprintf("rdump_smalltop_s%03d_e%02d_r%03d.txt",$sim,$err,$run);
+	    print job "R --no-save < $outfile > /dev/null\n";
+	    
+	    close(job);
+	
+	    print out2 "sbatch $jobfile\n";
+	}
+    }
+}
+
+close(out2);
+system("chmod a+rx sbatch_batch");
+	
+	
+	
+	
+	
+	
