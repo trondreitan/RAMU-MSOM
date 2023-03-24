@@ -1,7 +1,10 @@
 # RAMU-MSOM - simulation 1 scripts
 This folder contains the necessary scripts to run simulation 1 in our study, which is concerned with estimation when individual count data has unidentified individuals, regional occupancy and additional information concerning regional occupancy. The summary scripts compares RMSEs for model and raw (ratio) estimates, corrected and uncorrected for unidentified individuals. Note that some files are label 'colony' as that is the term for the individuals in our empirical dataset. Most of the scripts will be similar to that of the empirical analysis, so those are shown at the end
 
-In a subfolder, we will put the simulation files we used.
+In a subfolder, we will put the simulation files we used. 
+
+Most of the structure and scripts here are the same as for the empirical study, but we give complete files so that the scripts are 
+self-contained in this folder.
 
 R Scripts:
 
