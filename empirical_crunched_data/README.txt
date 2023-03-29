@@ -1,0 +1,1 @@
+Contains output file from "rel_abundance_smalltop.R" with posterior means plus lower and upper 95% credibility bands for relative abundance, occupancy, abundance-given-occupancy and regional occupancy, used by the pltting script, "plot.R".
