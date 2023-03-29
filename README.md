@@ -2,9 +2,27 @@
 Relative Abundance estimation with Unidentified individuals using Multi-Species Occupancy Modelling
 
 This folder contains the necessary scripts and data files to
-run our analyses, as well as running your own analysis (by replacing 
+run our analyses on our empirical dataset, as well as running your own analysis (by replacing 
 our files with your own).
 
+Also contains subfolders for the simulations plus some extra data files for the empirical study.
+
+Folders:
+* simoccu1 - Simulation 1 checks if the estimation works when all the features are present. 
+    Also tests if raw estimates (ratios) work compareably well (they do not), and the effect of
+    not correcting for unidentified individuals. Contains scripts and also a subfolder with our 
+    simulated datasets.
+
+* simoccu2 - Simulation 2 checks how well our new estimation procedure, which uses individual 
+     count data, works compared to the old procedure, which used subsample count data. Also compares
+     model estimates with raw estimates. A subfolder contains the study of the effect of observational
+     errors. there are further subfolders for our simualted datasets.
+     
+* empirical_original_files - Contains our original datasets, that were collated to our input dataset
+     for our analyses ("expanded_infile.csv").
+     
+* empirical_crunched_data - Contains posterior estimates and uncertainty bands for relative abundance,
+     occupancy probability and abundance-given-occupancy, used for plotting.
 
 Data files:
 
