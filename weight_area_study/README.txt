@@ -1,4 +1,4 @@
-This folder contains the model script, the run script and the MCMC summary script for the weighted analysis of number of subsamples versus standardized volume and area derived from weight. You also need the other analyses scripts from the main folder.
+This folder contains the model script, the run script and the MCMC summary script for the weighted analysis of number of subsamples versus standardized volume and area derived from weight. You also need the other analyses scripts from the main folder. In addition to showing how this study was performed, this also gives an example of using an alternative model.
 
 R scripts:
 * model_weight_exposure.R - A model that makes a weighted average of number of subsamples, standardized volume and standardized area, with the weighted average parameters determining how much each of these 3 factors scales with the expected value.
