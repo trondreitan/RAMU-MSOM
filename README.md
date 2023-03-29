@@ -73,6 +73,8 @@ Data files:
     not (0). See the "collate_interactions" folder for how this
     data file was created.
   
+* formation_ages.csv - Contains formation age information used for plotting.
+  
 R Scripts:
 
 1) Files necessary for performing MCMC analyses:
