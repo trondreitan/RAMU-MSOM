@@ -282,6 +282,10 @@ Scripts that collates the output from the MCMC sampling:
     plotting or analyses. A preliminary plot of relative abundance (one plot for
     each species) is done at the end of the script, to show how these things can
     be plotted.
-    
-    
+  
+* plot.R - Plots the relative abundance estimates, occupancy probabilities, 
+    abundance-given-occupancy and regional occupancy probabilities from the
+    posterior estimates calcualted in "rel_abundance_smalltop.R". The means
+    and credibility bands are stored in the subfolder "empirical_crunched_data",
+    while the formation ages are found in the data file "formation_ages.csv".
     
