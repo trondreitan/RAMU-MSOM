@@ -23,6 +23,10 @@ Folders:
      
 * empirical_crunched_data - Contains posterior estimates and uncertainty bands for relative abundance,
      occupancy probability and abundance-given-occupancy, used for plotting.
+     
+* weight_area_study - Contains the code for running the weighted average of number of subsamples versus 
+     standardized area and volume study in the SI. Also gives an example of using an alternative model in 
+     the same setup as the standard model (which we called "smalltop").
 
 Data files:
 
