@@ -35,8 +35,8 @@ data file.
 * Ecological_samples_masterfile_NEW_27.09.2021.xlsx - Contains an extra data sheet called "Formations" 
 from where we fetch the formation information.
 
-* allsamples_with_counts_and_metainfo.csv - Contains number of subsamples for the first year (which was 
-missing from our currennt subsample data sheet). 
+* allsamples_with_counts_and_metainfo.csv - Contains number of subsamples for the first year of data 
+collection (which was missing from our currennt subsample data sheet). 
 
 
 
