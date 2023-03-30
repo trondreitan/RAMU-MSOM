@@ -31,9 +31,6 @@ from where we fetch the formation information.
 * allsamples_with_counts_and_metainfo.csv - Contains number of subsamples for the first year (which was 
 missing from our currennt subsample data sheet). 
 
-Plotting file:
-* formation_ages.csv - Contains estimates of the start and end of each formation, used for plotting.
-
 Output file: 
 * expanded_infile.csv - Is the site-aggrated occupancy data used for the analyses.
 
