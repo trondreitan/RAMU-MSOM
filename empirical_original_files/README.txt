@@ -4,7 +4,7 @@ for the formation data. Also read the old input file for our previous study (Rei
 in order to fill in some information for the first year of data. (PS: A new file formation age 
 estimates was used for the plotting, also included here). The script that takes these different 
 sources, checks and corrects them, collates the information to the site level and saves to the 
-occupancy analysis input file is also put here, for completeness.
+occupancy analysis input file ("epxanded_infile.csv") which is found in the main folder.
 
 R script:
 * check_and_write4.R - Reads the input file sheets for subsamples (shells), individuals (colony) and
@@ -31,8 +31,6 @@ from where we fetch the formation information.
 * allsamples_with_counts_and_metainfo.csv - Contains number of subsamples for the first year (which was 
 missing from our currennt subsample data sheet). 
 
-Output file: 
-* expanded_infile.csv - Is the site-aggrated occupancy data used for the analyses.
 
 
 
