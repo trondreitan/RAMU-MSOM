@@ -46,7 +46,6 @@ setdiff(col.sample, sh.sample)
 # none
 setdiff(sh.sample, col.sample)
 # "203" "26"
-# Ask Emanuela and LH
 
 # Check if there's any shell id's in colonies not found in shells:
 col.shells=sort(unique(colonies$Shell_ID))
@@ -211,7 +210,7 @@ setdiff(site.1,site.old)
 # None
 setdiff(site.old,site.1)
 #[1] "27" "33" "35" "36" "37" "39" "42" "51" "53" "62" "63" "64"
-# These, Emanuela has not gone through yet.
+# These has not been gone through yet.
 
 # Fill std.weight and std.area:
 for(i in 1:dim(sample)[1])
