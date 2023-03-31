@@ -1,14 +1,14 @@
-Relative Abundance estimation with Unidentified individuals using Multi-Species Occupancy Modelling
+Relative Abundance estiMation with Unidentified individuals using Multi-Species Occupancy Modelling
 
-This folder contains the necessary scripts and data files to run our analyses on our empirical dataset associated with the manuscript “Estimating relative species abundance using fossil data identified to different taxonomic levels”. It will also allow the same analyses to be done on other similarly structured datasets, which we call RAMU-MSOM (short for Relative Abundance estimation with Unidentified individuals using Multi-Species Occupancy Modelling).
+This folder contains the necessary scripts and data files to run our analyses on our empirical dataset associated with the manuscript “Estimating relative species abundance using fossil data identified to different taxonomic levels”. It will also allow the same analyses to be done on other similarly structured datasets, which we call RAMU-MSOM (short for Relative Abundance estiMation with Unidentified individuals using Multi-Species Occupancy Modelling)), to be done on other similarly structured datasets.
 
 Within this folder, we provide two subfolders with empirical data, two subfolders containing code for the two sets of simulations described in the manuscript and a subfolder with extra data and scripts files for a part of the empirical study presented only in the supplementary information of the manuscript.
 
 Subfolders:
 
-* simoccu1 - Simulation 1 checks if the estimation works when all the model features are present. Also tests if raw estimates (ratios) work compareably well (they do not), and the effect of not correcting for unidentified individuals. Contains scripts and also a subfolder with our simulated datasets.
+* simoccu1 - Simulation 1 checks if the estimation works when all the model features are present. Also tests if raw estimates (ratios) work comparably well (they do not), and the effect of not correcting for unidentified individuals. Contains scripts and also a subfolder with our simulated datasets.
 
-* simoccu2 - Simulation 2 checks how well the new estimation procedure, which uses individual count data, works compared to the old procedure presented in Reitan et al. 2022, which used subsample count data. Also compares model estimates with raw estimates. A subfolder contains the study of the effect of observational errors. The subfolder within this (simdata) contain simulated datasets.
+* simoccu2 - Simulation 2 checks how well the new estimation procedure, which uses individual count data, works compared to the procedure presented in Reitan et al. 2022, which used subsample count data. Also compares model estimates with raw estimates. A subfolder contains the study of the effect of observational errors. The subfolder (simdata) within simoccu2 contain simulated datasets.
 
 * empirical_original_files - Contains the original datasets, that were collated for the input dataset for analyses ("expanded_infile.csv").
 
@@ -19,8 +19,8 @@ Subfolders:
 
 Data files in this folder: 
 
-* expanded_infile.csv. - This is the individual count occupancy analysis data file. Contains one row per site. There is one column for each species, where the cells has the number of individuals observed for each site for each species. Each row also has a formation number, a formation name (which can be matched with other data files), the total number of subsamples (shells), the sum weight and standardized area and volume of these shells and the number of unidentified individuals belonging to the Microporella genus See the "empirical dataset" folder for how this file was created.
-The following columns are mandatory: 
+* expanded_infile.csv. - This is the individual count occupancy analysis data file. Contains one row per site. There is one column for each species, where the cells have the number of individuals observed for each site, for each species. Each row also has a formation number, a formation name (which can be matched with other data files), the total number of subsamples (shells), the summed weight and standardized area and volume of these shells and the number of unidentified individuals belonging to the <>Microporella<> genus See the "empirical dataset" folder for how this file was created.
+    The following columns are mandatory: 
     1. form.nr - The number of the formation/time period. Should run from 1 to number of formations. Time ordering does not matter, though it is recommended that you keep track of which formation number means what formation. 
     2. Formation_name - The name of the formation/time interval. Make sure that the formation names and the formation numbers are consistent! Formation names are used for creating the additional information file in the "collate_interactions" folder, though not in the analysis scripts themselves. The formation names are however defined in the "read_data.R" script, so the analysis will throw an error as the code is now. This could however be remedied in future versions, in which case one can create the additional information file without formation names, such that this column can be omitted.
     3. K1/K2/K.mid - Should contain the start, end and middle of the formations/time intervals. This information is collated in the "read_data.R" script so is mandatory so far. However, it is not used in the analysis scripts, so could be omitted in a future version.
